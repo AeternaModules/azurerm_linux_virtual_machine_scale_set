@@ -222,8 +222,11 @@ resource "azurerm_linux_virtual_machine_scale_set" "linux_virtual_machine_scale_
   dynamic "secret" {
     for_each = each.value.secret != null ? [each.value.secret] : []
     content {
-      certificate {
-        url = secret.value.certificate.url
+      dynamic "certificate" {
+        for_each = secret.value.certificate
+        content {
+          url = certificate.value.url
+        }
       }
       key_vault_id = secret.value.key_vault_id
     }
