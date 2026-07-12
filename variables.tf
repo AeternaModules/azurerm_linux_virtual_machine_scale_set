@@ -47,9 +47,13 @@ Required:
         - write_accelerator_enabled (optional)
 Optional:
     - admin_password
+    - admin_password_key_vault_id (alternative to admin_password - read from Key Vault instead)
+    - admin_password_key_vault_secret_name (alternative to admin_password - read from Key Vault instead)
     - capacity_reservation_group_id
     - computer_name_prefix
     - custom_data
+    - custom_data_key_vault_id (alternative to custom_data - read from Key Vault instead)
+    - custom_data_key_vault_secret_name (alternative to custom_data - read from Key Vault instead)
     - disable_password_authentication
     - do_not_run_extensions_on_overprovisioned_machines
     - edge_zone
@@ -188,9 +192,13 @@ EOT
     do_not_run_extensions_on_overprovisioned_machines = optional(bool) # Default: false
     disable_password_authentication                   = optional(bool) # Default: true
     custom_data                                       = optional(string)
+    custom_data_key_vault_id                          = optional(string)
+    custom_data_key_vault_secret_name                 = optional(string)
     computer_name_prefix                              = optional(string)
     capacity_reservation_group_id                     = optional(string)
     admin_password                                    = optional(string)
+    admin_password_key_vault_id                       = optional(string)
+    admin_password_key_vault_secret_name              = optional(string)
     max_bid_price                                     = optional(number) # Default: -1
     zones                                             = optional(set(string))
     network_interface = list(object({

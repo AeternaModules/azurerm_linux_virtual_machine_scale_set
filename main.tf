@@ -1,3 +1,13 @@
+data "azurerm_key_vault_secret" "admin_password" {
+  for_each     = { for k, v in var.linux_virtual_machine_scale_sets : k => v if v.admin_password_key_vault_id != null && v.admin_password_key_vault_secret_name != null }
+  name         = each.value.admin_password_key_vault_secret_name
+  key_vault_id = each.value.admin_password_key_vault_id
+}
+data "azurerm_key_vault_secret" "custom_data" {
+  for_each     = { for k, v in var.linux_virtual_machine_scale_sets : k => v if v.custom_data_key_vault_id != null && v.custom_data_key_vault_secret_name != null }
+  name         = each.value.custom_data_key_vault_secret_name
+  key_vault_id = each.value.custom_data_key_vault_id
+}
 resource "azurerm_linux_virtual_machine_scale_set" "linux_virtual_machine_scale_sets" {
   for_each = var.linux_virtual_machine_scale_sets
 
@@ -31,10 +41,10 @@ resource "azurerm_linux_virtual_machine_scale_set" "linux_virtual_machine_scale_
   edge_zone                                         = each.value.edge_zone
   do_not_run_extensions_on_overprovisioned_machines = each.value.do_not_run_extensions_on_overprovisioned_machines
   disable_password_authentication                   = each.value.disable_password_authentication
-  custom_data                                       = each.value.custom_data
+  custom_data                                       = each.value.custom_data != null ? each.value.custom_data : try(data.azurerm_key_vault_secret.custom_data[each.key].value, null)
   computer_name_prefix                              = each.value.computer_name_prefix
   capacity_reservation_group_id                     = each.value.capacity_reservation_group_id
-  admin_password                                    = each.value.admin_password
+  admin_password                                    = each.value.admin_password != null ? each.value.admin_password : try(data.azurerm_key_vault_secret.admin_password[each.key].value, null)
   max_bid_price                                     = each.value.max_bid_price
   zones                                             = each.value.zones
 
