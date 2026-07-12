@@ -1,3 +1,7 @@
+output "linux_virtual_machine_scale_sets_id" {
+  description = "Map of id values across all linux_virtual_machine_scale_sets, keyed the same as var.linux_virtual_machine_scale_sets"
+  value       = { for k, v in azurerm_linux_virtual_machine_scale_set.linux_virtual_machine_scale_sets : k => v.id }
+}
 output "linux_virtual_machine_scale_sets_additional_capabilities" {
   description = "Map of additional_capabilities values across all linux_virtual_machine_scale_sets, keyed the same as var.linux_virtual_machine_scale_sets"
   value       = { for k, v in azurerm_linux_virtual_machine_scale_set.linux_virtual_machine_scale_sets : k => v.additional_capabilities }
