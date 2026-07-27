@@ -99,6 +99,8 @@ Optional:
         - caching (required)
         - create_option (optional)
         - disk_encryption_set_id (optional)
+        - disk_iops_read_write (optional)
+        - disk_mbps_read_write (optional)
         - disk_size_gb (required)
         - lun (required)
         - name (optional)
@@ -305,6 +307,8 @@ EOT
       caching                        = string
       create_option                  = optional(string)
       disk_encryption_set_id         = optional(string)
+      disk_iops_read_write           = optional(number)
+      disk_mbps_read_write           = optional(number)
       disk_size_gb                   = number
       lun                            = number
       name                           = optional(string)

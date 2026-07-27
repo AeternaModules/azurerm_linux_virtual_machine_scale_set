@@ -154,6 +154,8 @@ resource "azurerm_linux_virtual_machine_scale_set" "linux_virtual_machine_scale_
       caching                        = data_disk.value.caching
       create_option                  = data_disk.value.create_option
       disk_encryption_set_id         = data_disk.value.disk_encryption_set_id
+      disk_iops_read_write           = data_disk.value.disk_iops_read_write
+      disk_mbps_read_write           = data_disk.value.disk_mbps_read_write
       disk_size_gb                   = data_disk.value.disk_size_gb
       lun                            = data_disk.value.lun
       name                           = data_disk.value.name
