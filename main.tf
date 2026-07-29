@@ -51,11 +51,10 @@ resource "azurerm_linux_virtual_machine_scale_set" "linux_virtual_machine_scale_
   dynamic "network_interface" {
     for_each = each.value.network_interface
     content {
-      auxiliary_mode                = network_interface.value.auxiliary_mode
-      auxiliary_sku                 = network_interface.value.auxiliary_sku
-      dns_servers                   = network_interface.value.dns_servers
-      enable_accelerated_networking = network_interface.value.enable_accelerated_networking
-      enable_ip_forwarding          = network_interface.value.enable_ip_forwarding
+      accelerated_networking_enabled = network_interface.value.accelerated_networking_enabled
+      auxiliary_mode                 = network_interface.value.auxiliary_mode
+      auxiliary_sku                  = network_interface.value.auxiliary_sku
+      dns_servers                    = network_interface.value.dns_servers
       dynamic "ip_configuration" {
         for_each = network_interface.value.ip_configuration
         content {
@@ -86,6 +85,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "linux_virtual_machine_scale_
           version   = ip_configuration.value.version
         }
       }
+      ip_forwarding_enabled     = network_interface.value.ip_forwarding_enabled
       name                      = network_interface.value.name
       network_security_group_id = network_interface.value.network_security_group_id
       primary                   = network_interface.value.primary
@@ -136,8 +136,8 @@ resource "azurerm_linux_virtual_machine_scale_set" "linux_virtual_machine_scale_
   dynamic "automatic_os_upgrade_policy" {
     for_each = each.value.automatic_os_upgrade_policy != null ? [each.value.automatic_os_upgrade_policy] : []
     content {
-      disable_automatic_rollback  = automatic_os_upgrade_policy.value.disable_automatic_rollback
-      enable_automatic_os_upgrade = automatic_os_upgrade_policy.value.enable_automatic_os_upgrade
+      automatic_os_upgrade_enabled = automatic_os_upgrade_policy.value.automatic_os_upgrade_enabled
+      automatic_rollback_enabled   = automatic_os_upgrade_policy.value.automatic_rollback_enabled
     }
   }
 
@@ -151,18 +151,16 @@ resource "azurerm_linux_virtual_machine_scale_set" "linux_virtual_machine_scale_
   dynamic "data_disk" {
     for_each = each.value.data_disk != null ? each.value.data_disk : []
     content {
-      caching                        = data_disk.value.caching
-      create_option                  = data_disk.value.create_option
-      disk_encryption_set_id         = data_disk.value.disk_encryption_set_id
-      disk_iops_read_write           = data_disk.value.disk_iops_read_write
-      disk_mbps_read_write           = data_disk.value.disk_mbps_read_write
-      disk_size_gb                   = data_disk.value.disk_size_gb
-      lun                            = data_disk.value.lun
-      name                           = data_disk.value.name
-      storage_account_type           = data_disk.value.storage_account_type
-      ultra_ssd_disk_iops_read_write = data_disk.value.ultra_ssd_disk_iops_read_write
-      ultra_ssd_disk_mbps_read_write = data_disk.value.ultra_ssd_disk_mbps_read_write
-      write_accelerator_enabled      = data_disk.value.write_accelerator_enabled
+      caching                   = data_disk.value.caching
+      create_option             = data_disk.value.create_option
+      disk_encryption_set_id    = data_disk.value.disk_encryption_set_id
+      disk_iops_read_write      = data_disk.value.disk_iops_read_write
+      disk_mbps_read_write      = data_disk.value.disk_mbps_read_write
+      disk_size_gb              = data_disk.value.disk_size_gb
+      lun                       = data_disk.value.lun
+      name                      = data_disk.value.name
+      storage_account_type      = data_disk.value.storage_account_type
+      write_accelerator_enabled = data_disk.value.write_accelerator_enabled
     }
   }
 

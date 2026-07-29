@@ -8,11 +8,10 @@ Required:
     - resource_group_name
     - sku
     - network_interface (block):
+        - accelerated_networking_enabled (optional)
         - auxiliary_mode (optional)
         - auxiliary_sku (optional)
         - dns_servers (optional)
-        - enable_accelerated_networking (optional)
-        - enable_ip_forwarding (optional)
         - ip_configuration (required, block):
             - application_gateway_backend_address_pool_ids (optional)
             - application_security_group_ids (optional)
@@ -31,6 +30,7 @@ Required:
                 - version (optional)
             - subnet_id (optional)
             - version (optional)
+        - ip_forwarding_enabled (optional)
         - name (required)
         - network_security_group_id (optional)
         - primary (optional)
@@ -91,8 +91,8 @@ Optional:
         - enabled (required)
         - grace_period (optional)
     - automatic_os_upgrade_policy (block):
-        - disable_automatic_rollback (required)
-        - enable_automatic_os_upgrade (required)
+        - automatic_os_upgrade_enabled (required)
+        - automatic_rollback_enabled (required)
     - boot_diagnostics (block):
         - storage_account_uri (optional)
     - data_disk (block):
@@ -105,8 +105,6 @@ Optional:
         - lun (required)
         - name (optional)
         - storage_account_type (required)
-        - ultra_ssd_disk_iops_read_write (optional)
-        - ultra_ssd_disk_mbps_read_write (optional)
         - write_accelerator_enabled (optional)
     - extension (block):
         - auto_upgrade_minor_version (optional)
@@ -204,11 +202,10 @@ EOT
     max_bid_price                                     = optional(number)
     zones                                             = optional(set(string))
     network_interface = list(object({
-      auxiliary_mode                = optional(string)
-      auxiliary_sku                 = optional(string)
-      dns_servers                   = optional(list(string))
-      enable_accelerated_networking = optional(bool)
-      enable_ip_forwarding          = optional(bool)
+      accelerated_networking_enabled = optional(bool)
+      auxiliary_mode                 = optional(string)
+      auxiliary_sku                  = optional(string)
+      dns_servers                    = optional(list(string))
       ip_configuration = list(object({
         application_gateway_backend_address_pool_ids = optional(set(string))
         application_security_group_ids               = optional(set(string))
@@ -230,6 +227,7 @@ EOT
         subnet_id = optional(string)
         version   = optional(string)
       }))
+      ip_forwarding_enabled     = optional(bool)
       name                      = string
       network_security_group_id = optional(string)
       primary                   = optional(bool)
@@ -304,25 +302,23 @@ EOT
       type_handler_version       = string
     })))
     data_disk = optional(list(object({
-      caching                        = string
-      create_option                  = optional(string)
-      disk_encryption_set_id         = optional(string)
-      disk_iops_read_write           = optional(number)
-      disk_mbps_read_write           = optional(number)
-      disk_size_gb                   = number
-      lun                            = number
-      name                           = optional(string)
-      storage_account_type           = string
-      ultra_ssd_disk_iops_read_write = optional(number)
-      ultra_ssd_disk_mbps_read_write = optional(number)
-      write_accelerator_enabled      = optional(bool)
+      caching                   = string
+      create_option             = optional(string)
+      disk_encryption_set_id    = optional(string)
+      disk_iops_read_write      = optional(number)
+      disk_mbps_read_write      = optional(number)
+      disk_size_gb              = number
+      lun                       = number
+      name                      = optional(string)
+      storage_account_type      = string
+      write_accelerator_enabled = optional(bool)
     })))
     boot_diagnostics = optional(object({
       storage_account_uri = optional(string)
     }))
     automatic_os_upgrade_policy = optional(object({
-      disable_automatic_rollback  = bool
-      enable_automatic_os_upgrade = bool
+      automatic_os_upgrade_enabled = bool
+      automatic_rollback_enabled   = bool
     }))
     automatic_instance_repair = optional(object({
       action       = optional(string)
